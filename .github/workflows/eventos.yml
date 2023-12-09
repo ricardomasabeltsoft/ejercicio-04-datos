@@ -1,0 +1,34 @@
+name: Ejercicio con Eventos
+on:
+  pull_request:
+    types:
+      - opened
+    branches:
+      - main # main
+      - 'dev-*' # dev-nuevo dev-esto-es-nuevo
+      - 'feat/**' # feat/nuevo feat/nuevo/boton
+  workflow_dispatch:
+  push:
+    branches:
+      - main # main
+      - 'dev-*' # dev-nuevo dev-esto-es-nuevo
+      - 'feat/**' # feat/nuevo feat/nuevo/boton
+      # developer-1
+    paths-ignore:
+      - '.github/workflows/*'
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Mostrar datos del evento
+        run: echo "${{ toJSON(github.event) }}"
+      - name: Obtener código
+        uses: actions/checkout@v4
+      - name: Instalar dependencias
+        run: npm ci
+      - name: Ejecutar pruebas
+        run: npm run test
+      - name: Compilar código
+        run: npm run build
+      - name: Desplegar el proyecto
+        run: echo "Desplegando..."
